@@ -336,12 +336,12 @@ Position*GetLegalMoves(Piece*selection,Tile**tiles,int *numLegalMoves,Piece*piec
                 tempLegalMoves[db].x=x+1;
                 tempLegalMoves[db].y=y-1;
             }
-            if(IsInBound(x+1,y-1)&&tiles[x][y-1].piece.read=='p'&&tiles[x][y-1].piece.lastPos.x==x+2){
+            if(IsInBound(x+1,y-1)&&tiles[x][y-1].piece.read=='P'&&tiles[x][y-1].piece.lastPos.x==x+2){
                 db++;
                 tempLegalMoves[db].x=x+1;
                 tempLegalMoves[db].y=y-1;
             }
-            if(IsInBound(x+1,y+1)&&tiles[x][y+1].piece.read=='p'&&tiles[x][y+1].piece.lastPos.x==x+2){
+            if(IsInBound(x+1,y+1)&&tiles[x][y+1].piece.read=='P'&&tiles[x][y+1].piece.lastPos.x==x+2){
                 db++;
                 tempLegalMoves[db].x=x+1;
                 tempLegalMoves[db].y=y+1;
