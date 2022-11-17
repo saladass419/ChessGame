@@ -52,7 +52,7 @@ Position*GetLegalMoves(Piece*selection,Tile**tiles,int *numLegalMoves,Piece*piec
                 tempLegalMoves[db].y=y+1;
             }
             if(IsInCheck(selection->position,selection->color,pieces,piecesdb,tiles)||checkCastle==false)break;
-            if(IsPosEqual(selection->lastPos,selection->position)&&IsPosEqual(tiles[x][7].piece.lastPos,tiles[x][7].piece.position)){
+            if(IsPosEqual(selection->lastPos,selection->position)&&IsPosEqual(tiles[x][7].piece.lastPos,tiles[x][7].piece.position)){ //Check for short caslting
                 if(tiles[x][y+1].piece.read==' '&&tiles[x][y+2].piece.read==' '){
                     bool canCastle=true;
                     for(int i=0;i<piecesdb;i++){
@@ -77,7 +77,7 @@ Position*GetLegalMoves(Piece*selection,Tile**tiles,int *numLegalMoves,Piece*piec
                     }
                 }
             }
-            if(IsPosEqual(selection->lastPos,selection->position)&&IsPosEqual(tiles[x][0].piece.lastPos,tiles[x][0].piece.position)){
+            if(IsPosEqual(selection->lastPos,selection->position)&&IsPosEqual(tiles[x][0].piece.lastPos,tiles[x][0].piece.position)){ //Check for long castling
                 if(tiles[x][y-1].piece.read==' '&&tiles[x][y-2].piece.read==' '&&tiles[x][y-3].piece.read==' '){
                     bool canCastle=true;
                     for(int i=0;i<piecesdb;i++){

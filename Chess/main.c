@@ -26,7 +26,6 @@ int main(void)
         ClearSavedBoard("downedpieces.txt");
         ClearSavedBoard("lastposition.txt");
     }
-
     Color player;
 
     int downeddb = 0;
@@ -36,10 +35,13 @@ int main(void)
     Tile**tiles = NULL;
     Piece*selection = NULL;
     Position*legalMoves = NULL;
+
     int numLegalMoves=0;
-    Position input;
     int db = 0;
+    Position input;
+
     bool wantsToBreak=false;
+
     Position nullPos;
     nullPos.x = -1;
     nullPos.y = -1;
