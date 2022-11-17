@@ -18,7 +18,7 @@ int main(void)
 {
     setlocale(LC_CTYPE, "");
 
-    wprintf(L"New Game: '1'\nContinue previously started game: '0'\nForfeit game: 'F'\nOffer draw: 'D'\nQuit game: 'Q'\n");
+    wprintf(L"New Game: '1'\nContinue previously started game: '0'\nForfeit game: 'L'\nOffer draw: 'S'\nQuit game: 'Q'\n");
     int in;
     scanf("%d",&in);
     if(in == 1) {
@@ -132,7 +132,7 @@ Position GetInput(char* text,Piece*selection,Tile**tiles){
         wprintf(L"%s\n",text);
         scanf(" %c",&character);
         if(selection==NULL){
-            if(tolower(character)=='f'){
+            if(tolower(character)=='l'){
                 wprintf(L"If you want to forfeit the match, press '1'\nIf you want to cancel, press '0'\n");
                 scanf(" %d",&number);
                 if(number==1){
@@ -147,7 +147,7 @@ Position GetInput(char* text,Piece*selection,Tile**tiles){
                     wprintf(L"Incorrect input!\n");
                 }
             }
-            else if(tolower(character)=='d'){
+            else if(tolower(character)=='s'){
                 wprintf(L"If you want to offer a draw, press '1'\nIf you want to cancel, press '0'\n");
                 scanf(" %d",&number);
                 if(number==1){
