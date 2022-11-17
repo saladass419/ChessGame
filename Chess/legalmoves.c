@@ -1,7 +1,7 @@
 #include "debugmalloc.h"
 #include "legalmoves.h"
 
-Position*GetLegalMoves(Piece*selection,Tile**tiles,int *numLegalMoves,Piece*pieces,int piecesdb){
+Position*GetLegalMoves(Piece*selection,Tile**tiles,int *numLegalMoves,Piece*pieces,int piecesdb,bool checkCastle){
     if(selection==NULL) return NULL;
     int db = -1;
     Position pos=selection->position;
@@ -51,14 +51,14 @@ Position*GetLegalMoves(Piece*selection,Tile**tiles,int *numLegalMoves,Piece*piec
                 tempLegalMoves[db].x=x-1;
                 tempLegalMoves[db].y=y+1;
             }
-            if(IsInCheck(selection->position,selection->color,pieces,piecesdb,tiles))break;
+            if(IsInCheck(selection->position,selection->color,pieces,piecesdb,tiles)||checkCastle==false)break;
             if(IsPosEqual(selection->lastPos,selection->position)&&IsPosEqual(tiles[x][7].piece.lastPos,tiles[x][7].piece.position)){
                 if(tiles[x][y+1].piece.read==' '&&tiles[x][y+2].piece.read==' '){
                     bool canCastle=true;
                     for(int i=0;i<piecesdb;i++){
                         if(pieces[i].color!=selection->color){
                             int castlingNumLegalMoves=0;
-                            Position *castlingLegalMoves = GetLegalMoves(&pieces[i],tiles,&castlingNumLegalMoves,pieces,piecesdb);
+                            Position *castlingLegalMoves = GetLegalMoves(&pieces[i],tiles,&castlingNumLegalMoves,pieces,piecesdb,false);
                             Position betweenRookAndKing;
                             betweenRookAndKing.x=x;
                             betweenRookAndKing.y=y+1;
@@ -83,7 +83,7 @@ Position*GetLegalMoves(Piece*selection,Tile**tiles,int *numLegalMoves,Piece*piec
                     for(int i=0;i<piecesdb;i++){
                         if(pieces[i].color!=selection->color){
                             int castlingNumLegalMoves=0;
-                            Position *castlingLegalMoves = GetLegalMoves(&pieces[i],tiles,&castlingNumLegalMoves,pieces,piecesdb);
+                            Position *castlingLegalMoves = GetLegalMoves(&pieces[i],tiles,&castlingNumLegalMoves,pieces,piecesdb,false);
                             Position betweenRookAndKing;
                             betweenRookAndKing.x=x;
                             betweenRookAndKing.y=y-1;
@@ -378,7 +378,7 @@ bool IsInCheck(Position kingPos, Color color,Piece* pieces,int db, Tile**tiles){
 
     for(int i = 0; i < db; i++){
         if(pieces[i].color!=color&&tolower(pieces[i].read)!='k'){
-            legalMoves=GetLegalMoves(&pieces[i],tiles,&numLegalMoves,pieces,db);
+            legalMoves=GetLegalMoves(&pieces[i],tiles,&numLegalMoves,pieces,db,true);
             if(LegalMovesContains(legalMoves,numLegalMoves,kingPos)) { free(legalMoves); return true; } //Check if the king is in check
             if(numLegalMoves!=0) free(legalMoves);
         }

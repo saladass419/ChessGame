@@ -57,7 +57,13 @@ int main(void)
             }
             else
                 wprintf(L"%s is in check!\n",GetColor(player));  
-        } 
+        }
+        else{
+            if(CheckMate(pieces,db,kingPos,tiles,player)){
+                wprintf(L"It's a stalemate!\n",GetColor(player));
+                break;
+            }
+        }
         wprintf(L"%s's turn!\n",GetColor(player));
 
         do{ //Selecting a piece
@@ -69,7 +75,7 @@ int main(void)
                 continue;
             }
             Piece tempSelection = *selection;
-            legalMoves = GetLegalMoves(selection,tiles,&numLegalMoves,pieces,db);
+            legalMoves = GetLegalMoves(selection,tiles,&numLegalMoves,pieces,db,true);
             legalMoves = CorrectLegalMoves(selection,legalMoves,tiles,pieces,&db,&numLegalMoves,NULL); //Getting the legal moves of the selected piece
             selection = &tempSelection;
             
@@ -86,6 +92,7 @@ int main(void)
         pieces = MoveOrCapture(pieces,&db,selection->position,input,&downedPieces[downeddb],&downeddb,true); //Moving piece and capturing if needed
 
         free(legalMoves);
+        numLegalMoves=0;
         selection = NULL;
 
         player = (player+1)%2;
@@ -133,7 +140,7 @@ bool CheckMate(Piece* pieces, int db, Position kingPos,Tile**tiles, Color color)
     for (int i = 0; i < db; ++i)
     {
         if(pieces[i].color==color){
-            legalMoves = GetLegalMoves(&pieces[i],tiles,&numLegalMoves,pieces,db);
+            legalMoves = GetLegalMoves(&pieces[i],tiles,&numLegalMoves,pieces,db,true);
             legalMoves = CorrectLegalMoves(&pieces[i],legalMoves,tiles,pieces,&db,&numLegalMoves,NULL); //Checking for each piece if it has any legal moves
             totalCount+=numLegalMoves;
             free(legalMoves);
