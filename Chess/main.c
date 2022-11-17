@@ -18,7 +18,7 @@ int main(void)
 {
     setlocale(LC_CTYPE, "");
 
-    wprintf(L"New Game: '1'\nContinue previously started game: '0'\n");
+    wprintf(L"New Game: '1'\nContinue previously started game: '0'\nForfeit game: 'F'\nOffer draw: 'D'\nQuit game: 'Q'\n");
     int in;
     scanf("%d",&in);
     if(in == 1) {
@@ -39,7 +39,7 @@ int main(void)
     int numLegalMoves=0;
     Position input;
     int db = 0;
-
+    bool wantsToBreak=false;
     Position nullPos;
     nullPos.x = -1;
     nullPos.y = -1;
@@ -69,6 +69,18 @@ int main(void)
         do{ //Selecting a piece
             selection = NULL;
             input = GetInput("Select a piece! ",selection,tiles);
+            if(input.x==-1&&input.y==-1){
+                wprintf(L"Game forfeited! %s lost!\n",GetColor(player));
+                wantsToBreak=true;
+                break;
+            }else if(input.x==-2&&input.y==-2){
+                wprintf(L"Game drawn!\n");
+                wantsToBreak=true;
+                break;
+            }else if(input.x==-3&&input.y==-3){
+                wantsToBreak=true;
+                break;
+            }
             selection = SelectPiece(pieces,db,input,player);
             if(selection==NULL) {
                 wprintf(L"Selection is invalid!\n"); 
@@ -81,7 +93,7 @@ int main(void)
             
             if(legalMoves==NULL) wprintf(L"That piece cannot move!\n");
         } while(selection==NULL||legalMoves==NULL);
-
+        if(wantsToBreak) break;
         DrawBoard(InitializeBoard(tiles,pieces,db),selection->position,legalMoves,numLegalMoves,player,downedPieces,downeddb); //Drawing the board
 
         do{ //Moving a piece
@@ -116,7 +128,55 @@ Position GetInput(char* text,Piece*selection,Tile**tiles){
     int i = 0;
     do{
         wprintf(L"%s\n",text);
-        scanf(" %c %d",&character,&number);
+        scanf(" %c",&character);
+        if(selection==NULL){
+            if(tolower(character)=='f'){
+                wprintf(L"If you want to forfeit the match, press '1'\nIf you want to cancel, press '0'\n");
+                scanf(" %d",&number);
+                if(number==1){
+                    input.x=-1;
+                    input.y=-1;
+                    return input;
+                }
+                else if(number==0){
+                    continue;
+                }
+                else{
+                    wprintf(L"Incorrect input!\n");
+                }
+            }
+            else if(tolower(character)=='d'){
+                wprintf(L"If you want to offer a draw, press '1'\nIf you want to cancel, press '0'\n");
+                scanf(" %d",&number);
+                if(number==1){
+                    input.x=-2;
+                    input.y=-2;
+                    return input;
+                }
+                else if(number==0){
+                    continue;
+                }
+                else{
+                    wprintf(L"Incorrect input!\n");
+                }
+            }
+            else if(tolower(character) == 'q'){
+                wprintf(L"If you want to quit, press '1'\nIf you want to cancel, press '0'\n");
+                scanf(" %d",&number);
+                if(number==1){
+                    input.x=-3;
+                    input.y=-3;
+                    return input;
+                }
+                else if(number==0){
+                    continue;
+                }
+                else{
+                    wprintf(L"Incorrect input!\n");
+                }
+            }
+        }
+        scanf("%d",&number);
 
         input.y=tolower(character)-97; //Converting chess squares to coordinates
         input.x=(number-8)*-1;
