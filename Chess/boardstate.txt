@@ -1,10 +1,88 @@
 rnbqkbnrpppppppp                    P           PPPP PPPRNBQKBNR
-rnbqkbnrppp pppp           p        P           PPPP PPPRNBQKBNR
-rnbqkbnrppp pppp           p        P           PPPPQPPPRNB KBNR
-rnb kbnrpppqpppp           p        P           PPPPQPPPRNB KBNR
-rnb kbnrpppqpppp           p        P           PPPP PPPRNBQKBNR
-rnbqkbnrppp pppp           p        P           PPPP PPPRNBQKBNR
-rnbqkbnrppp pppp           p        P           PPPPQPPPRNB KBNR
-rnb kbnrpppqpppp           p        P           PPPPQPPPRNB KBNR
-rnb kbnrpppqpppp           p        P           PPPP PPPRNBQKBNR
-rnbqkbnrppp pppp           p        P           PPPP PPPRNBQKBNR
+rnbqkbnrpp ppppp          p         P           PPPP PPPRNBQKBNR
+rnbqkbnrpp ppppp          p         P        N  PPPP PPPRNBQKB R
+rnbqkbnrpp p ppp    p     p         P        N  PPPP PPPRNBQKB R
+rnbqkbnrpp p ppp    p     p        PP        N  PPP  PPPRNBQKB R
+rnbqkbnrpp p ppp    p              pP        N  PPP  PPPRNBQKB R
+rnbqkbnrpp p ppp    p              NP           PPP  PPPRNBQKB R
+r bqkbnrpp p ppp  n p              NP           PPP  PPPRNBQKB R
+r bqkbnrpp p ppp  n p              NP     N     PPP  PPPR BQKB R
+r b kbnrppqp ppp  n p              NP     N     PPP  PPPR BQKB R
+r b kbnrppqp ppp  n p              NP     N B   PPP  PPPR  QKB R
+r b kbnr pqp pppp n p              NP     N B   PPP  PPPR  QKB R
+r b kbnr pqp pppp n p              NP   P N B    PP  PPPR  QKB R
+r b kb r pqp pppp n pn             NP   P N B    PP  PPPR  QKB R
+r b kb r pqp pppp n pn             NPP  P N B    PP   PPR  QKB R
+r b kb r pq  pppp nppn             NPP  P N B    PP   PPR  QKB R
+r b kb r pq  pppp nppn             NPP  P N BQ   PP   PPR   KB R
+r b k  r pq bpppp nppn             NPP  P N BQ   PP   PPR   KB R
+r b k  r pq bpppp nppn             NPP  P N BQ   PP   PP  KR B R
+r b  rk  pq bpppp nppn             NPP  P N BQ   PP   PP  KR B R
+r b  rk  pq bpppp Nppn              PP  P N BQ   PP   PP  KR B R
+r b  rk   q bpppp pppn              PP  P N BQ   PP   PP  KR B R
+r b  rk   q bpppp pppn              PPP P N BQ   PP    P  KR B R
+ rb  rk   q bpppp pppn              PPP P N BQ   PP    P  KR B R
+ rb  rk   q bpppp pppn        P     PP  P N BQ   PP    P  KR B R
+ rb  rk   qnbpppp ppp         P     PP  P N BQ   PP    P  KR B R
+ rb  rk   qnbpppp ppp         P     PP PP N BQ   PP       KR B R
+ rb  rk   qnbpppp p p      p  P     PP PP N BQ   PP       KR B R
+ rb  rk   qnbpppp p p      p  PP    PP  P N BQ   PP       KR B R
+ rb  rk    nbpppp p p   q  p  PP    PP  P N BQ   PP       KR B R
+ rb  rk    nbpppp p p   q  p  PP    PP  P N  Q   PP  B    KR B R
+ rb  rk    nb ppp p p   q  p pPP    PP  P N  Q   PP  B    KR B R
+ rb  rk    nb ppp p p   q  P pPP     P  P N  Q   PP  B    KR B R
+ rb  rk    nb ppp   p   q  p pPP     P  P N  Q   PP  B    KR B R
+ rb  rk    nb ppp   p   q  p pPP     P  P N      PP QB    KR B R
+  b  rk    nb ppp   p   q  p pPP     P  P N      rP QB    KR B R
+  b  rk    nb ppp   Q   q  p pPP     P  P N      rP  B    KR B R
+  b   k    nbrppp   Q   q  p pPP     P  P N      rP  B    KR B R
+  b   k    nbrppp   Q   q  p pPP   B P  P N      rP       KR B R
+  b   k    n rppp   Q   q  p pPP   B P  b N      rP       KR B R
+  b   k    n rppp   Q   q  p pPP   B P  b N      rPK       R B R
+  b   k    n rppp   Q      p pPP q B P  b N      rPK       R B R
+  b   k    n rppp          Q pPP q B P  b N      rPK       R B R
+      k  b n rppp          Q pPP q B P  b N      rPK       R B R
+      k  b n rppp            pPP qQB P  b N      rPK       R B R
+      k  b n rppp  q         pPP  QB P  b N      rPK       R B R
+      k  b n rppp  q  P      p P  QB P  b N      rPK       R B R
+      k  b n rp p  q  p      p P  QB P  b N      rPK       R B R
+      k  b n rp p  q  P      p    QB P  b N      rPK       R B R
+      k  b n rp p     P      p    QB q  b N      rPK       R B R
+      k  b n rp p     P      p    Q  q  b N B    rPK       R B R
+      k  b n rp p  q  P      p    Q     b N B    rPK       R B R
+      k  b n rp p  q  P      p    Q     b NBB    rPK       R   R
+      k  b n rp p     q      p    Q     b NBB    rPK       R   R
+      k  b n rp p     q      p    Q     b NBB    rPK          RR
+      k  b n rp p    q       p    Q     b NBB    rPK          RR
+      k  b n rp p    q R     p    Q     b NBB    rPK          R 
+      k  b nqrp p      R     p    Q     b NBB    rPK          R 
+      k  b nqrp p     R      p    Q     b NBB    rPK          R 
+     k   b nqrp p     R      p    Q     b NBB    rPK          R 
+     k   b nqrp p     R      pB   Q     b NB     rPK          R 
+     k   b n rp p     R      pB  qQ     b NB     rPK          R 
+     k   bQn rp p     R      pB  q      b NB     rPK          R 
+      k  bQn rp p     R      pB  q      b NB     rPK          R 
+      k  bQn rp p     R      pB  qB     b N      rPK          R 
+      k  bQn rp p     R      pB  qB     b N       rK          R 
+      k  bQn rp p     R      pB  qB     b N       K           R 
+      k  bQn rp p     R      pB   B     b N      qK           R 
+      k  bQn rp p     R      pB   B     b NK     q            R 
+      k  bQ  rp p     R   n  pB   B     b NK     q            R 
+      k  bQ  rp p     R   n  pB   BK    b N      q            R 
+      k  bQ  rp p     R      pB   BK    bnN      q            R 
+      k  bQ  rp p     R      pB    K    bBN      q            R 
+      k  bQ  rp p     R      pB    K    bqN                   R 
+      k  b   rp p     R      pB   QK    bqN                   R 
+      k  b   rp p     R      pB   QK    b N       q           R 
+      k  b   rR p            pB   QK    b N       q           R 
+         b   rk p            pB   QK    b N       q           R 
+         b   rk p    B       p    QK    b N       q           R 
+     k   b   r  p    B       p    QK    b N       q           R 
+     k   b   r  p            pB   QK    b N       q           R 
+     k   b r    p            pB   QK    b N       q           R 
+     k   b r    p           KpB   Q     b N       q           R 
+     k   b r    p           KpB   Q     b N            q      R 
+     k   b r    p           Kp    Q  B  b N            q      R 
+     k   b r    p           Kp    Q  B  b N                   q 
+     k   b r    p      B    Kp    Q     b N                   q 
+    k    b r    p      B    Kp    Q     b N                   q 
