@@ -42,6 +42,7 @@ int main(void)
 
     bool wantsToBreak=false;
     bool wantsToChangeSelection=false;
+    int repetitionCount=0;
 
     Position nullPos;
     nullPos.x = -1;
@@ -62,8 +63,8 @@ int main(void)
                 wprintf(L"%s is in check!\n",GetColor(player));  
         }
         else{
-            if(CheckMate(pieces,db,kingPos,tiles,player)){
-                wprintf(L"It's a stalemate!\n",GetColor(player));
+            if(CheckMate(pieces,db,kingPos,tiles,player)||repetitionCount>=6){
+                wprintf(L"It's a stalemate!\n");
                 break;
             }
         }
@@ -73,7 +74,7 @@ int main(void)
             wantsToChangeSelection=false;
             selection = NULL;
             input = GetInput("Select a piece! ",selection,tiles);
-            if(input.x==-1&&input.y==-1){
+            if(input.x==-1&&input.y==-1){ //Checking the input for forfeiting, quitting, offering draw
                 wprintf(L"Game forfeited! %s lost!\n",GetColor(player));
                 wantsToBreak=true;
                 break;
@@ -116,6 +117,11 @@ int main(void)
             continue;
         }
         pieces = MoveOrCapture(pieces,&db,selection->position,input,&downedPieces[downeddb],&downeddb,true); //Moving piece and capturing if needed
+
+        if(tolower(selection->read)!='p'){
+            if(IsPosEqual(selection->lastPos,input))repetitionCount+=1;
+            else repetitionCount=0;
+        }
 
         free(legalMoves);
         numLegalMoves=0;
