@@ -21,7 +21,11 @@ int main(void)
 {
     setlocale(LC_CTYPE, "");
 
+<<<<<<< HEAD
     wprintf(L"New Game: '1'\nContinue previously started game: '0'\nWatch playback:'2'\nIn-game:\nSwitch selection: 'P' | Forfeit game: 'L' | Offer draw: 'S' | Quit game: 'Q'\n");
+=======
+    wprintf(L"New Game: '1'\nContinue previously started game: '0'\nForfeit game: 'L'\nOffer draw: 'S'\nQuit game: 'Q'\n");
+>>>>>>> parent of ee8b04d (almost finished game)
     int in;
     do{
         scanf("%d",&in);
@@ -53,8 +57,11 @@ int main(void)
     Position input;
 
     bool wantsToBreak=false;
+<<<<<<< HEAD
     bool wantsToChangeSelection=false;
     int repetitionCount=0;
+=======
+>>>>>>> parent of ee8b04d (almost finished game)
 
     Position nullPos;
     nullPos.x = -1;
@@ -83,7 +90,6 @@ int main(void)
         wprintf(L"%s's turn!\n",GetColor(player));
 
         do{ //Selecting a piece
-            wantsToChangeSelection=false;
             selection = NULL;
             input = GetInput("Select a piece! ",selection,tiles);
             if(input.x==-1&&input.y==-1){ //Checking the input for forfeiting, quitting, offering draw
@@ -115,19 +121,9 @@ int main(void)
 
         do{ //Moving a piece
             input = GetInput("Select a destination!\n",selection,tiles);
-            if(input.x==-4&&input.y==-4){
-                wantsToChangeSelection=true;
-                break;
-            }
             if(!LegalMovesContains(legalMoves,numLegalMoves,input)) wprintf(L"That piece cannot move there!\n");
         } while(!LegalMovesContains(legalMoves,numLegalMoves,input));
-        if(wantsToChangeSelection){
-            selection=NULL;
-            free(legalMoves);
-            numLegalMoves=0;
-            DrawBoard(InitializeBoard(tiles,pieces,db),nullPos,legalMoves,numLegalMoves,player,downedPieces,downeddb); //Drawing the board
-            continue;
-        }
+
         pieces = MoveOrCapture(pieces,&db,selection->position,input,&downedPieces[downeddb],&downeddb,true); //Moving piece and capturing if needed
 
         if(tolower(selection->read)!='p'){
@@ -140,13 +136,6 @@ int main(void)
         selection = NULL;
 
         player = (player+1)%2;
-
-        for(int i = 0; i<db;i++){
-            if(pieces[i].color==player&&tolower(pieces[i].read)=='p'){
-                SetPosEqual(&pieces[i].lastPos,pieces[i].position);
-            }
-        }
-
         DrawBoard(InitializeBoard(tiles,pieces,db),nullPos,legalMoves,numLegalMoves,player,downedPieces,downeddb); //Drawing the board
 
         SaveLastPosition(tiles);
@@ -212,20 +201,6 @@ Position GetInput(char* text,Piece*selection,Tile**tiles){
                 }
                 else{
                     wprintf(L"Incorrect input!\n");
-                }
-            }
-        }
-        else{
-            if(tolower(character)=='p'){
-                wprintf(L"If you want to change selection, press '1'\nIf you want to cancel, press '0'\n");
-                scanf(" %d",&number);
-                if(number==1){
-                    input.x=-4;
-                    input.y=-4;
-                    return input;
-                }
-                else if(number==0){
-                    continue;
                 }
             }
         }
