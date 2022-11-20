@@ -1,10 +1,9 @@
+rnbqkbnrpppppppp                                PPPPPPPPRNBQKBNR
 rnbqkbnrpppppppp                    P           PPPP PPPRNBQKBNR
 rnbqkbnrppp pppp           p        P           PPPP PPPRNBQKBNR
-rnbqkbnrppp pppp           p        P           PPPPQPPPRNB KBNR
-rnb kbnrpppqpppp           p        P           PPPPQPPPRNB KBNR
-rnb kbnrpppqpppp           p        P           PPPP PPPRNBQKBNR
-rnbqkbnrppp pppp           p        P           PPPP PPPRNBQKBNR
-rnbqkbnrppp pppp           p        P           PPPPQPPPRNB KBNR
-rnb kbnrpppqpppp           p        P           PPPPQPPPRNB KBNR
-rnb kbnrpppqpppp           p        P           PPPP PPPRNBQKBNR
-rnbqkbnrppp pppp           p        P           PPPP PPPRNBQKBNR
+rnbqkbnrppp pppp           p        P Q         PPPP PPPRNB KBNR
+rnbqkbnrppp pppp           P          Q         PPPP PPPRNB KBNR
+rnb kbnrppp pppp           q          Q         PPPP PPPRNB KBNR
+rnQ kbnrppp pppp           q                    PPPP PPPRNB KBNR
+rnQqkbnrppp pppp                                PPPP PPPRNB KBNR
+rn Qkbnrppp pppp                                PPPP PPPRNB KBNR

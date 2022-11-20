@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <wchar.h>
 #include <locale.h>
+#include <ctype.h>
 #include <stdbool.h>
 
 #include "common.h"
@@ -13,19 +14,30 @@
 
 Position GetInput(char* text,Piece*selection,Tile**tiles);
 bool CheckMate(Piece* pieces, int db, Position kingPos,Tile**tiles, Color color);
+char**ReadPlayBackBoardState(int *move);
+void PlayBack();
 
 int main(void)
 {
     setlocale(LC_CTYPE, "");
 
-    wprintf(L"New Game: '1'\nContinue previously started game: '0'\nSwitch selection: 'P'\nForfeit game: 'L'\nOffer draw: 'S'\nQuit game: 'Q'\n");
+    wprintf(L"New Game: '1'\nContinue previously started game: '0'\nWatch playback:'2'\nIn-game:\nSwitch selection: 'P' | Forfeit game: 'L' | Offer draw: 'S' | Quit game: 'Q'\n");
     int in;
-    scanf("%d",&in);
-    if(in == 1) {
-        ClearSavedBoard("boardstate.txt");
-        ClearSavedBoard("downedpieces.txt");
-        ClearSavedBoard("lastposition.txt");
-    }
+    do{
+        scanf("%d",&in);
+        if(in == 1) {
+            ClearSavedBoard("boardstate.txt");
+            ClearSavedBoard("downedpieces.txt");
+            ClearSavedBoard("lastposition.txt");
+        }
+        else if(in==2){
+            PlayBack();
+            exit(0);
+        }
+        else if(in!=0){
+            wprintf(L"Invalid input!\n");
+        }
+    }while(in!=0&&in!=1&&in!=2);
     Color player;
 
     int downeddb = 0;
@@ -50,8 +62,8 @@ int main(void)
 
     pieces = InitializePieces(ReadBoardState(&player),&db,ReadLastPosition());
     tiles = InitializeBoard(tiles,pieces,db);
+    if(in==1) SaveBoard(tiles);
     DrawBoard(tiles,nullPos,legalMoves,numLegalMoves,player,downedPieces,downeddb); //Drawing the board
-
     do{
         Position kingPos = FindKing(player,pieces,db);
         if(IsInCheck(kingPos,player,pieces,db,tiles)){
@@ -249,4 +261,90 @@ bool CheckMate(Piece* pieces, int db, Position kingPos,Tile**tiles, Color color)
     }
     if(totalCount==0) return true;
     return false;
+}
+char**ReadPlayBackBoardState(int *move){
+    if(*move<0)*move=0;
+
+    FILE*file=fopen("boardstate.txt","r");
+    if (file == NULL) {
+        printf("File can't be opened! \n");
+        return NULL;
+    }
+    char*line = NULL;
+    size_t len = 0;
+    int db=0;
+
+    while(getline(&line,&len,file)!=-1&&db<*move) {
+        db++;
+    }
+    if(*move>db)*move=db-1;
+    
+    if(strlen(line)==0){ 
+        wprintf(L"There is no previously saved game!\n");
+        return NULL;
+    }
+    char **_boardState = (char**)malloc(8*sizeof(char*));
+    for(int i = 0; i < 8; i++){
+        _boardState[i] = (char*)malloc(9*sizeof(char));
+    }
+
+    int i=0;
+    for(int x = 0;x<8;x++){
+        for(int y=0;y<8;y++){
+            _boardState[x][y]=line[i++];
+        }
+    }
+    fclose(file);
+    return _boardState;
+}
+void PlayBack(){
+    int move = 0;
+    char**boardState = ReadPlayBackBoardState(&move);
+    if(boardState==NULL){
+        return;
+    }
+
+    Color player = white;
+
+    Piece* pieces = NULL;
+    Tile**tiles = NULL;
+    int db = 0;
+
+    Position nullPos;
+    nullPos.x=-1;
+    nullPos.y=-1;
+
+    char input;
+    pieces = InitializePieces(boardState,&db,ReadLastPosition());
+    tiles = InitializeBoard(tiles,pieces,db);
+
+    DrawBoard(tiles,nullPos,NULL,0,player,NULL,0); //Drawing the board
+
+    wprintf(L"To move forward: 'E'\nTo move backward: 'Q'\nTo flip view: 'R'\nTo exit: 'W'\n");
+    do{
+        scanf(" %c",&input);
+        if(tolower(input)=='e') {
+            move+=1;
+            free(pieces);
+        }
+        else if(tolower(input)=='q') {
+            move-=1;
+            free(pieces);
+        }
+        else if(tolower(input)=='r') {
+            player = (player+1)%2;
+            free(pieces);
+        }
+        else if(tolower(input)=='w') break;
+        else {
+            wprintf(L"Invalid input!\n");
+            continue;
+        }
+        pieces = InitializePieces(ReadPlayBackBoardState(&move),&db,ReadLastPosition());
+        tiles = InitializeBoard(tiles,pieces,db);
+        DrawBoard(tiles,nullPos,NULL,0,player,NULL,0); //Drawing the board
+    }while(tolower(input)!='w');
+    free(pieces);
+    FreeTiles(tiles);
+    return;
 }

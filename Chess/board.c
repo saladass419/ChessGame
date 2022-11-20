@@ -78,6 +78,9 @@ Piece *ReadDownedPieces(int *downeddb){
     while((piece = fgetwc(file))!=WEOF){
         SetPiecesEqual(&pieces[*downeddb],NullPiece());
         pieces[*downeddb].type=piece;
+        if(pieces[*downeddb].type==0x2655||pieces[*downeddb].type==0x2656||pieces[*downeddb].type==0x2657||pieces[*downeddb].type==0x2658||pieces[*downeddb].type==0x2659)
+            pieces[*downeddb].color = white;
+        else pieces[*downeddb].color = black;
         *downeddb+=1;
     }
     for(int i  = *downeddb; i < 30; i++){
