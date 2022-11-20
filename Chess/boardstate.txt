@@ -1,4 +1,5 @@
 rnbqkbnrpppppppp                    P           PPPP PPPRNBQKBNR
+<<<<<<< HEAD
 rnbqkbnrpp ppppp          p         P           PPPP PPPRNBQKBNR
 rnbqkbnrpp ppppp          p         P        N  PPPP PPPRNBQKB R
 rnbqkbnrpp p ppp    p     p         P        N  PPPP PPPRNBQKB R
@@ -86,3 +87,6 @@ r b  rk   q bpppp pppn              PPP P N BQ   PP    P  KR B R
      k   b r    p           Kp    Q  B  b N                   q 
      k   b r    p      B    Kp    Q     b N                   q 
     k    b r    p      B    Kp    Q     b N                   q 
+=======
+rnbqkbnrpppp ppp            p       P           PPPP PPPRNBQKBNR
+>>>>>>> parent of ee8b04d (almost finished game)
