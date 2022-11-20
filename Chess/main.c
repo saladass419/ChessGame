@@ -14,7 +14,7 @@
 
 Position GetInput(char* text,Piece*selection,Tile**tiles);
 bool CheckMate(Piece* pieces, int db, Position kingPos,Tile**tiles, Color color);
-char**ReadPlayBackBoardState(int *move);
+char**ReadPlayBackBoardState(int move);
 void PlayBack();
 
 int main(void)
@@ -262,9 +262,7 @@ bool CheckMate(Piece* pieces, int db, Position kingPos,Tile**tiles, Color color)
     if(totalCount==0) return true;
     return false;
 }
-char**ReadPlayBackBoardState(int *move){
-    if(*move<0)*move=0;
-
+char**ReadPlayBackBoardState(int move){
     FILE*file=fopen("boardstate.txt","r");
     if (file == NULL) {
         printf("File can't be opened! \n");
@@ -272,17 +270,12 @@ char**ReadPlayBackBoardState(int *move){
     }
     char*line = NULL;
     size_t len = 0;
-    int db=0;
 
-    while(getline(&line,&len,file)!=-1&&db<*move) {
-        db++;
+    for (int i = 0; i <= move; i++)
+    {
+        getline(&line,&len,file);
     }
-    if(*move>db)*move=db-1;
     
-    if(strlen(line)==0){ 
-        wprintf(L"There is no previously saved game!\n");
-        return NULL;
-    }
     char **_boardState = (char**)malloc(8*sizeof(char*));
     for(int i = 0; i < 8; i++){
         _boardState[i] = (char*)malloc(9*sizeof(char));
@@ -299,10 +292,22 @@ char**ReadPlayBackBoardState(int *move){
 }
 void PlayBack(){
     int move = 0;
-    char**boardState = ReadPlayBackBoardState(&move);
-    if(boardState==NULL){
+
+    FILE*file = fopen("boardstate.txt","r");
+    int max=-1;
+    char*line = NULL;
+    size_t len = 0;
+    while(getline(&line,&len,file)!=-1) {
+        max++; //Counting how many moves are there in the save file
+    }
+    fclose(file);
+
+    if(max==0){
+        wprintf(L"There is no previously saved game!\n");
         return;
     }
+
+    char**boardState = ReadPlayBackBoardState(move);
 
     Color player = white;
 
@@ -324,23 +329,27 @@ void PlayBack(){
     do{
         scanf(" %c",&input);
         if(tolower(input)=='e') {
-            move+=1;
-            free(pieces);
+            if(move<max)
+                move+=1;
+            else wprintf(L"There is no more moves in that direction!\n");
         }
         else if(tolower(input)=='q') {
-            move-=1;
-            free(pieces);
+            if(move>0)
+                move-=1;
+            else wprintf(L"There is no more moves in that direction!\n");
         }
         else if(tolower(input)=='r') {
             player = (player+1)%2;
-            free(pieces);
         }
         else if(tolower(input)=='w') break;
         else {
             wprintf(L"Invalid input!\n");
             continue;
         }
-        pieces = InitializePieces(ReadPlayBackBoardState(&move),&db,ReadLastPosition());
+        wprintf(L"Current move: %d / Max moves: %d\n",move,max);
+        free(pieces);
+        db=0;
+        pieces = InitializePieces(ReadPlayBackBoardState(move),&db,ReadLastPosition());
         tiles = InitializeBoard(tiles,pieces,db);
         DrawBoard(tiles,nullPos,NULL,0,player,NULL,0); //Drawing the board
     }while(tolower(input)!='w');

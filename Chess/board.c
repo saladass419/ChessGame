@@ -36,8 +36,8 @@ char**ReadBoardState(Color *color){
                 _boardState[x][y]=line[i++];
             }
         }
+        *color = (db-1)%2;
     }
-    *color = db%2;
     fclose(file);
     return _boardState;
 }
@@ -130,14 +130,17 @@ Tile** InitializeBoard(Tile**tiles,Piece*pieces, int db){
     for(int x = 0; x<8;x++){
         for(int y = 0; y < 8; y++){
             tempPos.x=x; tempPos.y=y;
+            bool didFind=false;
             for(int i = 0; i<db;i++){
                 if(IsPosEqual(pieces[i].position,tempPos)){ //Setting up non-free squares
                     SetPiecesEqual(&tiles[x][y].piece,pieces[i]);
+                    didFind=true;
                     break;
                 }
-                else { //Setting up free squares
-                    SetPiecesEqual(&tiles[x][y].piece,temp);
-                }
+            }
+            if(didFind==false)
+            {
+                SetPiecesEqual(&tiles[x][y].piece,temp); //Setting up free squares
             }
         }
     }
