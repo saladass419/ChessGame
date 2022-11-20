@@ -22,11 +22,7 @@ int main(void)
     setlocale(LC_CTYPE, "");
 
 <<<<<<< HEAD
-<<<<<<< HEAD
     wprintf(L"New Game: '1'\nContinue previously started game: '0'\nWatch playback:'2'\nIn-game:\nSwitch selection: 'P' | Forfeit game: 'L' | Offer draw: 'S' | Quit game: 'Q'\n");
-=======
-    wprintf(L"New Game: '1'\nContinue previously started game: '0'\nForfeit game: 'L'\nOffer draw: 'S'\nQuit game: 'Q'\n");
->>>>>>> parent of ee8b04d (almost finished game)
 =======
     wprintf(L"New Game: '1'\nContinue previously started game: '0'\nForfeit game: 'L'\nOffer draw: 'S'\nQuit game: 'Q'\n");
 >>>>>>> parent of ee8b04d (almost finished game)
@@ -62,11 +58,8 @@ int main(void)
 
     bool wantsToBreak=false;
 <<<<<<< HEAD
-<<<<<<< HEAD
     bool wantsToChangeSelection=false;
     int repetitionCount=0;
-=======
->>>>>>> parent of ee8b04d (almost finished game)
 =======
 >>>>>>> parent of ee8b04d (almost finished game)
 
