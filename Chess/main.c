@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <wchar.h>
 #include <locale.h>
+#include <ctype.h>
 #include <stdbool.h>
 
 #include "common.h"
@@ -13,19 +14,30 @@
 
 Position GetInput(char* text,Piece*selection,Tile**tiles);
 bool CheckMate(Piece* pieces, int db, Position kingPos,Tile**tiles, Color color);
+char**ReadPlayBackBoardState(int move);
+void PlayBack();
 
 int main(void)
 {
     setlocale(LC_CTYPE, "");
 
-    wprintf(L"New Game: '1'\nContinue previously started game: '0'\nForfeit game: 'L'\nOffer draw: 'S'\nQuit game: 'Q'\n");
+    wprintf(L"New Game: '1'\nContinue previously started game: '0'\nWatch playback:'2'\nIn-game:\nSwitch selection: 'P' | Forfeit game: 'L' | Offer draw: 'S' | Quit game: 'Q'\n");
     int in;
-    scanf("%d",&in);
-    if(in == 1) {
-        ClearSavedBoard("boardstate.txt");
-        ClearSavedBoard("downedpieces.txt");
-        ClearSavedBoard("lastposition.txt");
-    }
+    do{
+        scanf("%d",&in);
+        if(in == 1) {
+            ClearSavedBoard("boardstate.txt");
+            ClearSavedBoard("downedpieces.txt");
+            ClearSavedBoard("lastposition.txt");
+        }
+        else if(in==2){
+            PlayBack();
+            exit(0);
+        }
+        else if(in!=0){
+            wprintf(L"Invalid input!\n");
+        }
+    }while(in!=0&&in!=1&&in!=2);
     Color player;
 
     int downeddb = 0;
@@ -41,20 +53,17 @@ int main(void)
     Position input;
 
     bool wantsToBreak=false;
-<<<<<<< HEAD
     bool wantsToChangeSelection=false;
     int repetitionCount=0;
-=======
->>>>>>> parent of ee8b04d (almost finished game)
 
     Position nullPos;
     nullPos.x = -1;
     nullPos.y = -1;
 
-    pieces = InitializePieces(ReadBoardState(&player),&db,ReadLastPosition());
+    pieces = InitializePieces(ReadBoardState(&player),&db,ReadLastPosition()); //Initialize starting board based on text file
     tiles = InitializeBoard(tiles,pieces,db);
+    if(in==1) SaveBoard(tiles);
     DrawBoard(tiles,nullPos,legalMoves,numLegalMoves,player,downedPieces,downeddb); //Drawing the board
-
     do{
         Position kingPos = FindKing(player,pieces,db);
         if(IsInCheck(kingPos,player,pieces,db,tiles)){
@@ -74,6 +83,7 @@ int main(void)
         wprintf(L"%s's turn!\n",GetColor(player));
 
         do{ //Selecting a piece
+            wantsToChangeSelection=false;
             selection = NULL;
             input = GetInput("Select a piece! ",selection,tiles);
             if(input.x==-1&&input.y==-1){ //Checking the input for forfeiting, quitting, offering draw
@@ -105,9 +115,19 @@ int main(void)
 
         do{ //Moving a piece
             input = GetInput("Select a destination!\n",selection,tiles);
+            if(input.x==-4&&input.y==-4){
+                wantsToChangeSelection=true;
+                break;
+            }
             if(!LegalMovesContains(legalMoves,numLegalMoves,input)) wprintf(L"That piece cannot move there!\n");
         } while(!LegalMovesContains(legalMoves,numLegalMoves,input));
-
+        if(wantsToChangeSelection){
+            selection=NULL;
+            free(legalMoves);
+            numLegalMoves=0;
+            DrawBoard(InitializeBoard(tiles,pieces,db),nullPos,legalMoves,numLegalMoves,player,downedPieces,downeddb); //Drawing the board
+            continue;
+        }
         pieces = MoveOrCapture(pieces,&db,selection->position,input,&downedPieces[downeddb],&downeddb,true); //Moving piece and capturing if needed
 
         if(tolower(selection->read)!='p'){
@@ -120,6 +140,13 @@ int main(void)
         selection = NULL;
 
         player = (player+1)%2;
+
+        for(int i = 0; i<db;i++){
+            if(pieces[i].color==player&&tolower(pieces[i].read)=='p'){
+                SetPosEqual(&pieces[i].lastPos,pieces[i].position);
+            }
+        }
+
         DrawBoard(InitializeBoard(tiles,pieces,db),nullPos,legalMoves,numLegalMoves,player,downedPieces,downeddb); //Drawing the board
 
         SaveLastPosition(tiles);
@@ -188,6 +215,20 @@ Position GetInput(char* text,Piece*selection,Tile**tiles){
                 }
             }
         }
+        else{
+            if(tolower(character)=='p'){
+                wprintf(L"If you want to change selection, press '1'\nIf you want to cancel, press '0'\n");
+                scanf(" %d",&number);
+                if(number==1){
+                    input.x=-4;
+                    input.y=-4;
+                    return input;
+                }
+                else if(number==0){
+                    continue;
+                }
+            }
+        }
         scanf("%d",&number);
 
         input.y=tolower(character)-97; //Converting chess squares to coordinates
@@ -206,13 +247,16 @@ Position GetInput(char* text,Piece*selection,Tile**tiles){
     return input;
 }
 bool CheckMate(Piece* pieces, int db, Position kingPos,Tile**tiles, Color color){
+    Piece*tempKing = NULL;
+    
     Position*legalMoves=NULL;
     int numLegalMoves=0;
     int totalCount = 0;
-    for (int i = 0; i < db; ++i)
+
+    for (int i = 0; i < db; i++)
     {
         if(pieces[i].color==color){
-            legalMoves = GetLegalMoves(&pieces[i],tiles,&numLegalMoves,pieces,db,true);
+            legalMoves = GetLegalMoves(&pieces[i],tiles,&numLegalMoves,pieces,db,false);
             legalMoves = CorrectLegalMoves(&pieces[i],legalMoves,tiles,pieces,&db,&numLegalMoves,NULL); //Checking for each piece if it has any legal moves
             totalCount+=numLegalMoves;
             free(legalMoves);
@@ -220,4 +264,99 @@ bool CheckMate(Piece* pieces, int db, Position kingPos,Tile**tiles, Color color)
     }
     if(totalCount==0) return true;
     return false;
+}
+char**ReadPlayBackBoardState(int move){
+    FILE*file=fopen("boardstate.txt","r");
+    if (file == NULL) {
+        printf("File can't be opened! \n");
+        return NULL;
+    }
+    char*line = NULL;
+    size_t len = 0;
+
+    for (int i = 0; i <= move; i++)
+    {
+        getline(&line,&len,file);
+    }
+    
+    char **_boardState = (char**)malloc(8*sizeof(char*));
+    for(int i = 0; i < 8; i++){
+        _boardState[i] = (char*)malloc(9*sizeof(char));
+    }
+
+    int i=0;
+    for(int x = 0;x<8;x++){
+        for(int y=0;y<8;y++){
+            _boardState[x][y]=line[i++];
+        }
+    }
+    fclose(file);
+    return _boardState;
+}
+void PlayBack(){
+    int move = 0;
+
+    FILE*file = fopen("boardstate.txt","r");
+    int max=-1;
+    char*line = NULL;
+    size_t len = 0;
+    while(getline(&line,&len,file)!=-1) {
+        max++; //Counting how many moves are there in the save file
+    }
+    fclose(file);
+
+    if(max==0){
+        wprintf(L"There is no previously saved game!\n");
+        return;
+    }
+
+    char**boardState = ReadPlayBackBoardState(move);
+
+    Color player = white;
+
+    Piece* pieces = NULL;
+    Tile**tiles = NULL;
+    int db = 0;
+
+    Position nullPos;
+    nullPos.x=-1;
+    nullPos.y=-1;
+
+    char input;
+    pieces = InitializePieces(boardState,&db,ReadLastPosition());
+    tiles = InitializeBoard(tiles,pieces,db);
+
+    DrawBoard(tiles,nullPos,NULL,0,player,NULL,0); //Drawing the board
+
+    wprintf(L"To move forward: 'E'\nTo move backward: 'Q'\nTo flip view: 'R'\nTo exit: 'W'\n");
+    do{
+        scanf(" %c",&input);
+        if(tolower(input)=='e') {
+            if(move<max)
+                move+=1;
+            else wprintf(L"There is no more moves in that direction!\n");
+        }
+        else if(tolower(input)=='q') {
+            if(move>0)
+                move-=1;
+            else wprintf(L"There is no more moves in that direction!\n");
+        }
+        else if(tolower(input)=='r') {
+            player = (player+1)%2;
+        }
+        else if(tolower(input)=='w') break;
+        else {
+            wprintf(L"Invalid input!\n");
+            continue;
+        }
+        wprintf(L"Current move: %d / Max moves: %d\n",move,max);
+        free(pieces);
+        db=0;
+        pieces = InitializePieces(ReadPlayBackBoardState(move),&db,ReadLastPosition());
+        tiles = InitializeBoard(tiles,pieces,db);
+        DrawBoard(tiles,nullPos,NULL,0,player,NULL,0); //Drawing the board
+    }while(tolower(input)!='w');
+    free(pieces);
+    FreeTiles(tiles);
+    return;
 }

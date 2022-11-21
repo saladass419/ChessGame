@@ -36,8 +36,8 @@ char**ReadBoardState(Color *color){
                 _boardState[x][y]=line[i++];
             }
         }
+        *color = (db-1)%2;
     }
-    *color = db%2;
     fclose(file);
     return _boardState;
 }
@@ -78,6 +78,9 @@ Piece *ReadDownedPieces(int *downeddb){
     while((piece = fgetwc(file))!=WEOF){
         SetPiecesEqual(&pieces[*downeddb],NullPiece());
         pieces[*downeddb].type=piece;
+        if(pieces[*downeddb].type==0x2655||pieces[*downeddb].type==0x2656||pieces[*downeddb].type==0x2657||pieces[*downeddb].type==0x2658||pieces[*downeddb].type==0x2659)
+            pieces[*downeddb].color = white;
+        else pieces[*downeddb].color = black;
         *downeddb+=1;
     }
     for(int i  = *downeddb; i < 30; i++){
@@ -127,14 +130,17 @@ Tile** InitializeBoard(Tile**tiles,Piece*pieces, int db){
     for(int x = 0; x<8;x++){
         for(int y = 0; y < 8; y++){
             tempPos.x=x; tempPos.y=y;
+            bool didFind=false;
             for(int i = 0; i<db;i++){
                 if(IsPosEqual(pieces[i].position,tempPos)){ //Setting up non-free squares
                     SetPiecesEqual(&tiles[x][y].piece,pieces[i]);
+                    didFind=true;
                     break;
                 }
-                else { //Setting up free squares
-                    SetPiecesEqual(&tiles[x][y].piece,temp);
-                }
+            }
+            if(didFind==false)
+            {
+                SetPiecesEqual(&tiles[x][y].piece,temp); //Setting up free squares
             }
         }
     }
