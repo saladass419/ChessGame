@@ -20,7 +20,8 @@ Piece NullPiece();
 Piece Promotion(Piece current);
 
 Piece *GetPieceFromPosition(Piece*pieces,int db,Position position);
-Piece*CreatePiece(Piece*pieces,int*db,Piece piece);
+int PiecesCount(Piece**pieces);
+Piece*CreatePiece(Piece*pieces,int*db,Piece piece,int idx);
 
 
 #endif // PIECE_H

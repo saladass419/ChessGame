@@ -304,12 +304,12 @@ Position*GetLegalMoves(Piece*selection,Tile**tiles,int *numLegalMoves,Piece*piec
                 tempLegalMoves[db].x=x-1;
                 tempLegalMoves[db].y=y-1;
             }
-            if(IsInBound(x-1,y-1)&&tiles[x][y-1].piece.read=='p'&&tiles[x][y-1].piece.lastPos.x==x-2){ 
+            if(IsInBound(x-1,y-1)&&tiles[x-1][y-1].piece.color==none&&tiles[x][y-1].piece.read=='p'&&tiles[x][y-1].piece.lastPos.x==x-2){ 
                 db++;
                 tempLegalMoves[db].x=x-1;
                 tempLegalMoves[db].y=y-1;
             }
-            if(IsInBound(x-1,y+1)&&tiles[x][y+1].piece.read=='p'&&tiles[x][y+1].piece.lastPos.x==x-2){
+            if(IsInBound(x-1,y+1)&&tiles[x-1][y-1].piece.color==none&&tiles[x][y+1].piece.read=='p'&&tiles[x][y+1].piece.lastPos.x==x-2){
                 db++;
                 tempLegalMoves[db].x=x-1;
                 tempLegalMoves[db].y=y+1;
@@ -336,12 +336,12 @@ Position*GetLegalMoves(Piece*selection,Tile**tiles,int *numLegalMoves,Piece*piec
                 tempLegalMoves[db].x=x+1;
                 tempLegalMoves[db].y=y-1;
             }
-            if(IsInBound(x+1,y-1)&&tiles[x][y-1].piece.read=='P'&&tiles[x][y-1].piece.lastPos.x==x+2){
+            if(IsInBound(x+1,y-1)&&tiles[x+1][y-1].piece.color==none&&tiles[x][y-1].piece.read=='P'&&tiles[x][y-1].piece.lastPos.x==x+2){
                 db++;
                 tempLegalMoves[db].x=x+1;
                 tempLegalMoves[db].y=y-1;
             }
-            if(IsInBound(x+1,y+1)&&tiles[x][y+1].piece.read=='P'&&tiles[x][y+1].piece.lastPos.x==x+2){
+            if(IsInBound(x+1,y+1)&&tiles[x+1][y-1].piece.color==none&&tiles[x][y+1].piece.read=='P'&&tiles[x][y+1].piece.lastPos.x==x+2){
                 db++;
                 tempLegalMoves[db].x=x+1;
                 tempLegalMoves[db].y=y+1;
@@ -379,7 +379,9 @@ bool IsInCheck(Position kingPos, Color color,Piece* pieces,int db, Tile**tiles){
     for(int i = 0; i < db; i++){
         if(pieces[i].color!=color&&tolower(pieces[i].read)!='k'){
             legalMoves=GetLegalMoves(&pieces[i],tiles,&numLegalMoves,pieces,db,true);
-            if(LegalMovesContains(legalMoves,numLegalMoves,kingPos)) { free(legalMoves); return true; } //Check if the king is in check
+            if(LegalMovesContains(legalMoves,numLegalMoves,kingPos)) { 
+                free(legalMoves); 
+                return true; } //Check if the king is in check
             if(numLegalMoves!=0) free(legalMoves);
         }
     }
@@ -403,24 +405,28 @@ Position*CorrectLegalMoves(Piece*selection,Position*legalMoves,Tile**tiles,Piece
         tempPiece = GetPieceFromPosition(pieces,*piecesdb,legalMoves[i]); //Check if there is a piece on the square
         if(tempPiece!=NULL){ // If there is, make a copy of that piece
             SetPiecesEqual(&hitPiece,*tempPiece);
-
+            int idx = -1;
+            for(int i = 0; i < *piecesdb; i++){
+                if(IsPosEqual(pieces[i].position,hitPiece.position)){
+                    idx=i;
+                    break;
+                }
+            }
             pieces = MoveOrCapture(pieces,piecesdb,tempPos,hitPiece.position,NULL,NULL,false); //Capture that piece with the selection
             tiles = InitializeBoard(tiles,pieces,*piecesdb);
-            
+
             if(tolower(tempSelection.read)=='k'){
                 SetPosEqual(&kingPos,hitPiece.position);
             }
-            
             if(!IsInCheck(kingPos,selection->color,pieces,*piecesdb,tiles)){ //See if the player is still in check
                 SetPosEqual(&tempLegalMoves[newdb++],legalMoves[i]); //If not, add that move to the legalmoves
             }   
-            
             if(tolower(tempSelection.read)=='k'){
                 SetPosEqual(&kingPos,tempPos);
             }
-            
+
             pieces = MovePiece(pieces,*piecesdb,hitPiece.position,tempPos,false); //Move back the selection
-            pieces = CreatePiece(pieces,piecesdb,hitPiece); //Recreate the piece that was taken
+            pieces = CreatePiece(pieces,piecesdb,hitPiece,idx); //Recreate the piece that was taken
 
             tiles = InitializeBoard(tiles,pieces,*piecesdb);
             
