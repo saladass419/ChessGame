@@ -1,6 +1,13 @@
-<<<<<<< HEAD
 rnbqkbnrpppppppp                                PPPPPPPPRNBQKBNR
-=======
 rnbqkbnrpppppppp                    P           PPPP PPPRNBQKBNR
-rnbqkbnrpppp ppp            p       P           PPPP PPPRNBQKBNR
->>>>>>> parent of ee8b04d (almost finished game)
+rnbqkbnrppp pppp           p        P           PPPP PPPRNBQKBNR
+rnbqkbnrppp pppp         B p        P           PPPP PPPRNBQK NR
+rnbqkbnrpp  pppp  p      B p        P           PPPP PPPRNBQK NR
+rnbqkbnrpp  pppp  p      B p        P        N  PPPP PPPRNBQK  R
+rnb kbnrpp  pppp  pq     B p        P        N  PPPP PPPRNBQK  R
+rnb kbnrpp  pppp  pq     B p        P        N  PPPP PPPRNBQ RK 
+r b kbnrpp  ppppn pq     B p        P        N  PPPP PPPRNBQ RK 
+r b kbnrpp  ppppn pq     B p        P        N  PPPPQPPPRNB  RK 
+r   kbnrpp  ppppn pq     B p        P b      N  PPPPQPPPRNB  RK 
+r   kbnrpp  ppppn pq     B p       PP b      N  PPP QPPPRNB  RK 
+  kr bnrpp  ppppn pq     B p       PP b      N  PPP QPPPRNB  RK 
