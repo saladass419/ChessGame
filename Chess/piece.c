@@ -141,12 +141,8 @@ Piece* MoveOrCapture(Piece*pieces,int*db,Position from, Position to,Piece *downe
     if(set==true&&((selection.read=='P'&&selection.position.x==0)||(selection.read=='p'&&selection.position.x==7))){ //Checking for promotion
         Piece promoted;
         SetPiecesEqual(&promoted,Promotion(selection));
-        int idx = -1;
-        for(int i = 0; i < *db; i++){
-            if(IsPosEqual(pieces[i].position,selection.position)) {idx = i; break;}
-        }
         pieces = RemovePiece(pieces,db,selection.position,downedPiece,&downeddb);
-        pieces = CreatePiece(pieces,db,promoted,idx);
+        pieces = CreatePiece(pieces,db,promoted);
     }
     return pieces;
 }
@@ -246,6 +242,7 @@ Position FindKing(Color color,Piece*pieces,int db){
         if(pieces[i].color==color&&tolower(pieces[i].read)=='k') return pieces[i].position;
     }
 }
+
 Piece*GetPieceFromPosition(Piece*pieces,int db,Position position){
     for (int i = 0; i < db; ++i)
     {
@@ -253,18 +250,14 @@ Piece*GetPieceFromPosition(Piece*pieces,int db,Position position){
     }
     return NULL;
 }
-Piece* CreatePiece(Piece*pieces,int*db,Piece piece, int idx){
+Piece* CreatePiece(Piece*pieces,int*db,Piece piece){
     Piece*tempPieces = (Piece*)malloc((*db+1)*sizeof(Piece));
-    int tempIdx=0;
-    for(int i = 0; i < *db+1; i++){
-        if(i==idx){
-            SetPiecesEqual(&tempPieces[i],piece);
-        }
-        else{
-            SetPiecesEqual(&tempPieces[i],pieces[tempIdx++]);
-        }
+    for(int i = 0; i < *db; i++){
+        SetPiecesEqual(&tempPieces[i],pieces[i]);
     }
     free(pieces);
+
+    SetPiecesEqual(&tempPieces[*db],piece);
     *db+=1;
     return tempPieces;
 }
