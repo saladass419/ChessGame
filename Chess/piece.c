@@ -246,7 +246,6 @@ Position FindKing(Color color,Piece*pieces,int db){
         if(pieces[i].color==color&&tolower(pieces[i].read)=='k') return pieces[i].position;
     }
 }
-
 Piece*GetPieceFromPosition(Piece*pieces,int db,Position position){
     for (int i = 0; i < db; ++i)
     {
@@ -268,13 +267,6 @@ Piece* CreatePiece(Piece*pieces,int*db,Piece piece, int idx){
     free(pieces);
     *db+=1;
     return tempPieces;
-}
-int PiecesCount(Piece**pieces){
-    int db = 0;
-    for(int i = 0; pieces[i]!=NULL; i++){
-        db++;
-    }
-    return db;
 }
 Piece NullPiece(){
     Piece piece;
