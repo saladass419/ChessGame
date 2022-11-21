@@ -261,6 +261,13 @@ Piece* CreatePiece(Piece*pieces,int*db,Piece piece){
     *db+=1;
     return tempPieces;
 }
+int PiecesCount(Piece**pieces){
+    int db = 0;
+    for(int i = 0; pieces[i]!=NULL; i++){
+        db++;
+    }
+    return db;
+}
 Piece NullPiece(){
     Piece piece;
     piece.position.x = -1;
